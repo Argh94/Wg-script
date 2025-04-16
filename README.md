@@ -108,3 +108,147 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Argh94/Wg-script/main/Wg.sh)
 این پروژه تحت مجوز MIT منتشر شده است.
 
 </div>
+# 🌐 WARP Config Generator
+
+[![GitHub Stars](https://img.shields.io/github/stars/Argh94/Wg-script?style=flat-square)](https://github.com/Argh94/Wg-script/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/Argh94/Wg-script?style=flat-square)](https://github.com/Argh94/Wg-script/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/Argh94/Wg-script?style=flat-square)](https://github.com/Argh94/Wg-script/issues)
+[![GitHub License](https://img.shields.io/github/license/Argh94/Wg-script?style=flat-square)](https://github.com/Argh94/Wg-script/blob/main/LICENSE)
+
+A powerful and versatile Bash script for generating WARP configurations across multiple platforms. This tool supports various VPN clients including WireGuard, AmneziaVPN, Hiddify, and V2RayNG.
+
+## 🚀 Features
+
+- Multiple Configuration Formats:
+  - WireGuard Standard Config
+  - AmneziaVPN Config
+  - Hiddify JSON Config
+  - V2RayNG JSON Config
+  - WireGuard URL Format
+
+- Advanced Functionality:
+  - IPv4 & IPv6 Endpoint Support
+  - Customizable MTU Settings
+  - Dynamic WARP Account Generation
+  - Reserved Address Management
+  - Custom DNS Configuration
+  - Automatic Account Registration
+
+- User Experience:
+  - Interactive CLI Interface
+  - Color-coded Output
+  - Progress Indicators
+  - Automatic Save Feature
+  - Permanent Installation Option
+
+## 📋 Prerequisites
+
+- Termux (Android) or Bash-compatible environment
+- Internet connection
+- curl package
+
+## 🔧 Installation
+
+### Quick Install
+```bash
+curl -fsSL https://raw.githubusercontent.com/Argh94/Wg-script/main/Wg.sh -o warp.sh
+chmod +x warp.sh
+```
+
+### Permanent Installation
+Run the script and select option 5 to install permanently. This will:
+- Create a ~/.argh94 directory
+- Add an 'Arg' command alias to your shell
+- Set up auto-completion (if available)
+
+## 💻 Usage
+
+1. **Basic Execution:**
+```bash
+./warp.sh
+```
+
+2. **After Permanent Installation:**
+```bash
+Arg
+```
+
+3. **Available Options:**
+   - `1` - Get WARP IPv4 Endpoint
+   - `2` - Get WARP IPv6 Endpoint
+   - `3` - Generate IPv4 Config
+   - `4` - Generate IPv6 Config
+   - `5` - Install Script Permanently
+   - `q` - Quit
+
+## ⚙️ Configuration Options
+
+- **MTU Size:** Customize the MTU value (default: 1280)
+- **Configuration Name:** Set a custom name for your configs
+- **DNS Settings:** Uses Cloudflare DNS by default
+  - IPv4: 1.1.1.1, 1.0.0.1
+  - IPv6: 2606:4700:4700::1111, 2606:4700:4700::1001
+
+## 📝 Output Files
+
+The script generates a comprehensive configuration file containing:
+- AmneziaVPN Configuration
+- WireGuard Configuration
+- Hiddify JSON Configuration
+- V2RayNG JSON Configuration
+- WireGuard URL
+
+Files are saved as: `warp_config_YYYY-MM-DD_HH-MM-SS.txt`
+
+## 🔒 Security Features
+
+- Secure Key Generation
+- Reserved Address Implementation
+- Custom MTU Support
+- Anti-Detection Mechanisms
+- Traffic Obfuscation Settings
+
+## 🌟 Advanced Features
+
+### V2RayNG Specific Features
+- Custom DNS Routing
+- Ad Blocking Integration
+- Iran-specific Routing Rules
+- Multiple Protocol Support
+- Traffic Optimization
+
+### Hiddify Specific Features
+- Fake Packet Generation
+- Custom Packet Sizing
+- Delay Implementation
+- Multiple Mode Support
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit pull requests.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Contact
+
+- GitHub: [@Argh94](https://github.com/Argh94)
+- Project Link: [https://github.com/Argh94/Wg-script](https://github.com/Argh94/Wg-script)
+
+## 🙏 Acknowledgments
+
+- Cloudflare WARP
+- WireGuard Project
+- V2Ray Project
+- AmneziaVPN Team
+- Hiddify Project
+
+---
+Made with ❤️ by Argh94
