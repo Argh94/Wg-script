@@ -47,6 +47,7 @@ urlencode() {
 }
 
 # Install script permanently
+# Install script permanently
 install_script() {
     echo -e "${CYAN}Installing script permanently...${RESET}"
     # Create directory if it doesn't exist
@@ -71,13 +72,27 @@ install_script() {
             touch ~/.bash_profile
             echo "source ~/.bashrc" >> ~/.bash_profile
         fi
-        # Try to reload .bashrc
-        if ! source ~/.bashrc 2>/dev/null && ! . ~/.bashrc 2>/dev/null; then
-            echo -e "${YELLOW}Warning: Could not reload .bashrc automatically.${RESET}"
+        # Reload .bashrc in the current session
+        if source ~/.bashrc 2>/dev/null; then
+            echo -e "${GREEN}Script installed successfully! You can now run it by typing 'Arg' in Termux.${RESET}"
+        else
+            echo -e "${YELLOW}Warning: Could not reload .bashrc automatically. Trying alternative method...${RESET}"
+            . ~/.bashrc 2>/dev/null
+            if [ $? -eq 0 ]; then
+                echo -e "${GREEN}Script installed successfully! You can now run it by typing 'Arg' in Termux.${RESET}"
+            else
+                echo -e "${RED}Error: Failed to reload .bashrc. Please run 'source ~/.bashrc' or restart Termux to use 'Arg'.${RESET}"
+                echo -e "${CYAN}You can also check ~/.bashrc and ~/.bash_profile for issues.${RESET}"
+                exit 1
+            fi
         fi
-        echo -e "${GREEN}Script installed successfully! Run it by typing 'Arg' in Termux.${RESET}"
-        echo -e "${CYAN}Please run 'source ~/.bashrc' or restart Termux to use 'Arg'.${RESET}"
-        echo -e "${CYAN}If 'Arg' still doesn't work, check ~/.bashrc and ~/.bash_profile.${RESET}"
+        # Verify alias is working
+        if alias Arg >/dev/null 2>&1; then
+            echo -e "${GREEN}Alias 'Arg' is now active and ready to use!${RESET}"
+        else
+            echo -e "${RED}Error: Alias 'Arg' is not active. Please check ~/.bashrc or restart Termux.${RESET}"
+            exit 1
+        fi
     else
         echo -e "${RED}Error: Failed to download the script. Please check your internet connection and try again.${RESET}"
         exit 1
