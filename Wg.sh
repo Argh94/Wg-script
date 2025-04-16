@@ -56,15 +56,20 @@ install_script() {
     # Download the latest script
     if curl -fsSL https://raw.githubusercontent.com/Argh94/Wg-script/main/Wg.sh -o ~/.argh94/argh94_warp.sh; then
         chmod +x ~/.argh94/argh94_warp.sh
+        # Ensure .bashrc exists
+        touch ~/.bashrc
         # Update or add alias to .bashrc
         if grep -q "alias Arg=" ~/.bashrc; then
             sed -i "s|alias Arg=.*|alias Arg='bash ~/.argh94/argh94_warp.sh'|" ~/.bashrc
         else
             echo "alias Arg='bash ~/.argh94/argh94_warp.sh'" >> ~/.bashrc
         fi
-        # Reload .bashrc
-        source ~/.bashrc 2>/dev/null || . ~/.bashrc
+        # Try to reload .bashrc
+        if ! source ~/.bashrc 2>/dev/null && ! . ~/.bashrc 2>/dev/null; then
+            echo -e "${YELLOW}Warning: Could not reload .bashrc. Please run 'source ~/.bashrc' manually.${RESET}"
+        fi
         echo -e "${GREEN}Script installed successfully! Run it by typing 'Arg' in Termux.${RESET}"
+        echo -e "${CYAN}If 'Arg' doesn't work, run 'source ~/.bashrc' and try again.${RESET}"
     else
         echo -e "${RED}Error: Failed to download the script. Please check your internet connection and try again.${RESET}"
         exit 1
