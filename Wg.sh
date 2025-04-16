@@ -14,8 +14,8 @@ RESET="\e[0m"
 
 # Display custom banner
 echo -e "${CYAN}=========================================${RESET}"
-echo -e "${CYAN}|       Argh94 WARP Config               |${RESET}"
-echo -e "${CYAN}| GitHub: ${BLUE}https://github.com/Argh94    ${RESET}|${RESET}"
+echo -e "${CYAN}|       Argh94 WARP Config              |${RESET}"
+echo -e "${CYAN}| GitHub:   ${BLUE}https://github.com/Argh94    ${RESET}|${RESET}"
 echo -e "${CYAN}=========================================${RESET}"
 echo -e "${CYAN}| Date: $(date '+%Y-%m-%d %H:%M:%S') |${RESET}"
 echo ""
@@ -54,7 +54,7 @@ install_script() {
     # Remove old script if it exists
     rm -f ~/.argh94/argh94_warp.sh
     # Download the latest script
-    if curl -fsSL https://raw.githubusercontent.com/Argh94/Argh94/main/Sel.sh -o ~/.argh94/argh94_warp.sh; then
+    if curl -fsSL https://raw.githubusercontent.com/Argh94/Wg-script/main/Wg.sh -o ~/.argh94/argh94_warp.sh; then
         chmod +x ~/.argh94/argh94_warp.sh
         # Update or add alias to .bashrc
         if grep -q "alias Arg=" ~/.bashrc; then
