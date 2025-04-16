@@ -13,10 +13,10 @@ WHITE="\e[37m"
 RESET="\e[0m"
 
 # Display custom banner
-echo -e "${CYAN}====================================${RESET}"
-echo -e "${CYAN}|       Argh94 WARP Config        |${RESET}"
+echo -e "${CYAN}===========================================${RESET}"
+echo -e "${CYAN}|           Argh94 WARP Config        |${RESET}"
 echo -e "${CYAN}| GitHub: ${BLUE}https://github.com/Argh94${RESET} |${RESET}"
-echo -e "${CYAN}====================================${RESET}"
+echo -e "${CYAN}===========================================${RESET}"
 echo -e "${CYAN}| Date: $(date '+%Y-%m-%d %H:%M:%S') |${RESET}"
 echo ""
 
@@ -101,14 +101,14 @@ install_script() {
 
 # Main menu with colored border
 echo -e "${GREEN}┌──────────────────────────────────┐${RESET}"
-echo -e "${GREEN}│${CYAN}       Select an Option          ${GREEN}│${RESET}"
+echo -e "${GREEN}│${CYAN}       Select an Option           ${GREEN}│${RESET}"
 echo -e "${GREEN}├──────────────────────────────────┤${RESET}"
-echo -e "${GREEN}│${RESET} 1) WARP IPv4 Endpoint IP Preferred ${GREEN}│${RESET}"
-echo -e "${GREEN}│${RESET} 2) WARP IPv6 Endpoint IP Preferred ${GREEN}│${RESET}"
-echo -e "${GREEN}│${RESET} 3) Generate IPv4 Config         ${GREEN}│${RESET}"
-echo -e "${GREEN}│${RESET} 4) Generate IPv6 Config         ${GREEN}│${RESET}"
-echo -e "${GREEN}│${RESET} 5) Install Script Permanently   ${GREEN}│${RESET}"
-echo -e "${GREEN}│${RESET} q) Quit                         ${GREEN}│${RESET}"
+echo -e "${GREEN}│${RESET} 1) WARP IPv4 Endpoint IP         ${GREEN}│${RESET}"
+echo -e "${GREEN}│${RESET} 2) WARP IPv6 Endpoint IP         ${GREEN}│${RESET}"
+echo -e "${GREEN}│${RESET} 3) Generate IPv4 Config          ${GREEN}│${RESET}"
+echo -e "${GREEN}│${RESET} 4) Generate IPv6 Config          ${GREEN}│${RESET}"
+echo -e "${GREEN}│${RESET} 5) Install Script Permanently    ${GREEN}│${RESET}"
+echo -e "${GREEN}│${RESET} q) Quit                          ${GREEN}│${RESET}"
 echo -e "${GREEN}└──────────────────────────────────┘${RESET}"
 read -p "Enter your choice: " user_choice
 
@@ -441,10 +441,10 @@ address_encoded=$(urlencode "$address_ipv4/32,$address_ipv6/128")
 wg_url="wireguard://$private_key_encoded@$endpoint?address=$address_encoded&reserved=$reserved_encoded&publickey=$public_key_encoded&mtu=$new_mtu#$new_name"
 
 # Display WireGuard URL with decorative lines
-echo -e "\n${CYAN}====================================${RESET}"
+echo -e "\n${CYAN}=================================================${RESET}"
 echo -e "${CYAN}|${RESET} ${GREEN}🔑 WireGuard URL by Argh94${RESET} ${CYAN}|${RESET}"
 echo -e "${CYAN}|${RESET} ${YELLOW}$wg_url${RESET}"
-echo -e "${CYAN}====================================${RESET}"
+echo -e "${CYAN}===================================================${RESET}"
 
 # Save configuration
 output_file="warp_config_$(date +%F_%H-%M-%S).txt"
