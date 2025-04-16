@@ -14,8 +14,8 @@ RESET="\e[0m"
 
 # Display custom banner
 echo -e "${CYAN}=========================================${RESET}"
-echo -e "${CYAN}|       Argh94 WARP Config              |${RESET}"
-echo -e "${CYAN}| GitHub:   ${BLUE}https://github.com/Argh94    ${RESET}|${RESET}"
+echo -e "${CYAN}|          Argh94 WARP Config           |${RESET}"
+echo -e "${CYAN}| GitHub:   ${BLUE}https://github.com/Argh94  ${RESET}|${RESET}"
 echo -e "${CYAN}=========================================${RESET}"
 echo -e "${CYAN}| Date: $(date '+%Y-%m-%d %H:%M:%S') |${RESET}"
 echo ""
