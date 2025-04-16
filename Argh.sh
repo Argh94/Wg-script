@@ -47,6 +47,7 @@ urlencode() {
 }
 
 # Install script permanently
+# Install script permanently
 install_script() {
     echo -e "${CYAN}Installing script permanently...${RESET}"
     # Create directory if it doesn't exist
@@ -306,7 +307,7 @@ AllowedIPs = 0.0.0.0/0, ::/0
 Endpoint = $endpoint
 EOF
 
-# Display Hiddify JSON Config
+# Generate Hiddify JSON Config
 echo -e "\n${GREEN}🌍 Hiddify JSON Config 🌍${RESET}"
 cat << EOF
 {
@@ -330,153 +331,105 @@ cat << EOF
 }
 EOF
 
-# Display V2Ray JSON Config (Copied from Kolandone)
+# Generate V2RayNG JSON Config
 echo -e "\n${GREEN}🚀 V2RayNG JSON Config 🚀${RESET}"
 cat << EOF
 {
+  "remarks": "$new_name - WoW",
+  "log": {"loglevel": "warning"},
   "dns": {
     "hosts": {
-      "geosite:category-porn": "127.0.0.1",
-      "domain:googleapis.cn": "googleapis.com"
+      "geosite:category-ads-all": "127.0.0.1",
+      "geosite:category-ads-ir": "127.0.0.1"
     },
     "servers": [
-      "1.1.1.1"
-    ]
+      "https://94.140.14.14/dns-query",
+      {
+        "address": "8.8.8.8",
+        "domains": ["geosite:category-ir", "domain:.ir"],
+        "expectIPs": ["geoip:ir"],
+        "port": 53
+      }
+    ],
+    "tag": "dns"
   },
-  "fakedns": [
-    {
-      "ipPool": "198.18.0.0/15",
-      "poolSize": 10000
-    }
-  ],
   "inbounds": [
     {
-      "listen": "127.0.0.1",
       "port": 10808,
       "protocol": "socks",
-      "settings": {
-        "auth": "noauth",
-        "udp": true,
-        "userLevel": 8
-      },
-      "sniffing": {
-        "destOverride": [
-          "http",
-          "tls",
-          "fakedns"
-        ],
-        "enabled": true
-      },
-      "tag": "socks"
+      "settings": {"auth": "noauth", "udp": true, "userLevel": 8},
+      "sniffing": {"destOverride": ["http", "tls"], "enabled": true, "routeOnly": true},
+      "tag": "socks-in"
+    },
+    {
+      "port": 10809,
+      "protocol": "http",
+      "settings": {"auth": "noauth", "udp": true, "userLevel": 8},
+      "sniffing": {"destOverride": ["http", "tls"], "enabled": true, "routeOnly": true},
+      "tag": "http-in"
     },
     {
       "listen": "127.0.0.1",
-      "port": 10809,
-      "protocol": "http",
-      "settings": {
-        "userLevel": 8
-      },
-      "tag": "http"
+      "port": 10853,
+      "protocol": "dokodemo-door",
+      "settings": {"address": "1.1.1.1", "network": "tcp,udp", "port": 53},
+      "tag": "dns-in"
     }
   ],
-  "log": {
-    "loglevel": "warning"
-  },
   "outbounds": [
     {
-      "mux": {
-        "concurrency": -1,
-        "enabled": false,
-        "xudpConcurrency": 8,
-        "xudpProxyUDP443": ""
-      },
       "protocol": "wireguard",
       "settings": {
-        "secretKey": "$private_key",
-        "address": [
-          "$address_ipv4/32",
-          "$address_ipv6/128"
-        ],
-        "peers": [
-          {
-            "publicKey": "$public_key",
-            "endpoint": "$endpoint",
-            "keepAlive": 5
-          }
-        ],
-        "reserved": [$reserved],
+        "address": ["$address_ipv4/32", "$address_ipv6/128"],
         "mtu": $new_mtu,
+        "peers": [{"endpoint": "$endpoint", "publicKey": "$public_key"}],
+        "reserved": [$reserved],
+        "secretKey": "$private_key",
+        "keepAlive": 10,
         "wnoise": "quic",
-        "wnoisecount": "15",
-        "wnoisedelay": "1-2",
-        "wpayloadsize": "5-10"
+        "wnoisecount": "10-15",
+        "wpayloadsize": "1-8",
+        "wnoisedelay": "1-3"
       },
-      "tag": "proxy"
+      "streamSettings": {"sockopt": {"dialerProxy": "warp-ir"}},
+      "tag": "warp-out"
     },
     {
-      "protocol": "freedom",
+      "protocol": "wireguard",
       "settings": {
-        "domainStrategy": "UseIP"
+        "address": ["$address_ipv4/32", "$address_ipv6/128"],
+        "mtu": $new_mtu,
+        "peers": [{"endpoint": "$endpoint", "publicKey": "$public_key"}],
+        "reserved": [$reserved],
+        "secretKey": "$private_key",
+        "keepAlive": 10,
+        "wnoise": "quic",
+        "wnoisecount": "10-15",
+        "wpayloadsize": "1-8",
+        "wnoisedelay": "1-3"
       },
-      "tag": "direct"
+      "tag": "warp-ir"
     },
-    {
-      "protocol": "blackhole",
-      "settings": {
-        "response": {
-          "type": "http"
-        }
-      },
-      "tag": "block"
-    }
+    {"protocol": "dns", "tag": "dns-out"},
+    {"protocol": "freedom", "settings": {}, "tag": "direct"},
+    {"protocol": "blackhole", "settings": {"response": {"type": "http"}}, "tag": "block"}
   ],
-  "remarks": "$new_name",
+  "policy": {
+    "levels": {"8": {"connIdle": 300, "downlinkOnly": 1, "handshake": 4, "uplinkOnly": 1}},
+    "system": {"statsOutboundUplink": true, "statsOutboundDownlink": true}
+  },
   "routing": {
     "domainStrategy": "IPIfNonMatch",
     "rules": [
-      {
-        "ip": [
-          "1.1.1.1"
-        ],
-        "outboundTag": "proxy",
-        "port": "53",
-        "type": "field"
-      },
-      {
-        "domain": [
-          "domain:ir",
-          "geosite:category-ir",
-          "geosite:private"
-        ],
-        "outboundTag": "direct",
-        "type": "field"
-      },
-      {
-        "ip": [
-          "geoip:ir",
-          "geoip:private"
-        ],
-        "outboundTag": "direct",
-        "type": "field"
-      },
-      {
-        "domain": [
-          "geosite:category-porn"
-        ],
-        "outboundTag": "block",
-        "type": "field"
-      },
-      {
-        "ip": [
-          "10.10.34.34",
-          "10.10.34.35",
-          "10.10.34.36"
-        ],
-        "outboundTag": "block",
-        "type": "field"
-      }
+      {"inboundTag": ["dns-in"], "outboundTag": "dns-out", "type": "field"},
+      {"ip": ["8.8.8.8"], "outboundTag": "direct", "port": "53", "type": "field"},
+      {"domain": ["geosite:category-ir", "domain:.ir"], "outboundTag": "direct", "type": "field"},
+      {"ip": ["geoip:ir", "geoip:private"], "outboundTag": "direct", "type": "field"},
+      {"domain": ["geosite:category-ads-all", "geosite:category-ads-ir"], "outboundTag": "block", "type": "field"},
+      {"outboundTag": "warp-out", "type": "field", "network": "tcp,udp"}
     ]
-  }
+  },
+  "stats": {}
 }
 EOF
 
@@ -539,104 +492,68 @@ output_file="warp_config_$(date +%F_%H-%M-%S).txt"
     echo "}"
     echo -e "\n🚀 V2RayNG JSON Config 🚀"
     echo "{"
+    echo '  "remarks": "'$new_name' - WoW",'
+    echo '  "log": {"loglevel": "warning"},'
     echo '  "dns": {'
     echo '    "hosts": {'
-    echo '      "geosite:category-porn": "127.0.0.1",'
-    echo '      "domain:googleapis.cn": "googleapis.com"'
+    echo '      "geosite:category-ads-all": "127.0.0.1",'
+    echo '      "geosite:category-ads-ir": "127.0.0.1"'
     echo '    },'
     echo '    "servers": ['
-    echo '      "1.1.1.1"'
-    echo '    ]'
+    echo '      "https://94.140.14.14/dns-query",'
+    echo '      {'
+    echo '        "address": "8.8.8.8",'
+    echo '        "domains": ["geosite:category-ir", "domain:.ir"],'
+    echo '        "expectIPs": ["geoip:ir"],'
+    echo '        "port": 53'
+    echo '      }'
+    echo '    ],'
+    echo '    "tag": "dns"'
     echo '  },'
-    echo '  "fakedns": ['
-    echo '    {'
-    echo '      "ipPool": "198.18.0.0/15",'
-    echo '      "poolSize": 10000'
-    echo '    }'
-    echo '  ],'
     echo '  "inbounds": ['
     echo '    {'
-    echo '      "listen": "127.0.0.1",'
     echo '      "port": 10808,'
     echo '      "protocol": "socks",'
-    echo '      "settings": {'
-    echo '        "auth": "noauth",'
-    echo '        "udp": true,'
-    echo '        "userLevel": 8'
-    echo '      },'
-    echo '      "sniffing": {'
-    echo '        "destOverride": ['
-    echo '          "http",'
-    echo '          "tls",'
-    echo '          "fakedns"'
-    echo '        ],'
-    echo '        "enabled": true'
-    echo '      },'
-    echo '      "tag": "socks"'
+    echo '      "settings": {"auth": "noauth", "udp": true, "userLevel": 8},'
+    echo '      "sniffing": {"destOverride": ["http", "tls"], "enabled": true, "routeOnly": true},'
+    echo '      "tag": "socks-in"'
+    echo '    },'
+    echo '    {'
+    echo '      "port": 10809,'
+    echo '      "protocol": "http",'
+    echo '      "settings": {"auth": "noauth", "udp": true, "userLevel": 8},'
+    echo '      "sniffing": {"destOverride": ["http", "tls"], "enabled": true, "routeOnly": true},'
+    echo '      "tag": "http-in"'
     echo '    },'
     echo '    {'
     echo '      "listen": "127.0.0.1",'
-    echo '      "port": 10809,'
-    echo '      "protocol": "http",'
-    echo '      "settings": {'
-    echo '        "userLevel": 8'
-    echo '      },'
-    echo '      "tag": "http"'
+    echo '      "port": 10853,'
+    echo '      "protocol": "dokodemo-door",'
+    echo '      "settings": {"address": "1.1.1.1", "network": "tcp,udp", "port": 53},'
+    echo '      "tag": "dns-in"'
     echo '    }'
     echo '  ],'
-    echo '  "log": {'
-    echo '    "loglevel": "warning"'
-    echo '  },'
     echo '  "outbounds": ['
     echo '    {'
-    echo '      "mux": {'
-    echo '        "concurrency": -1,'
-    echo '        "enabled": false,'
-    echo '        "xudpConcurrency": 8,'
-    echo '        "xudpProxyUDP443": ""'
-    echo '      },'
     echo '      "protocol": "wireguard",'
     echo '      "settings": {'
-    echo '        "secretKey": "'$private_key'",'
-    echo '        "address": ['
-    echo '          "'$address_ipv4'/32",'
-    echo '          "'$address_ipv6'/128"'
-    echo '        ],'
-    echo '        "peers": ['
-    echo '          {'
-    echo '            "publicKey": "'$public_key'",'
-    echo '            "endpoint": "'$endpoint'",'
-    echo '            "keepAlive": 5'
-    echo '          }'
-    echo '        ],'
-    echo '        "reserved": ['$reserved'],'
+    echo '        "address": ["'$address_ipv4'/32", "'$address_ipv6'/128"],'
     echo '        "mtu": '$new_mtu','
+    echo '        "peers": [{"endpoint": "'$endpoint'", "publicKey": "'$public_key'"}],'
+    echo '        "reserved": ['$reserved'],'
+    echo '        "secretKey": "'$private_key'",'
+    echo '        "keepAlive": 10,'
     echo '        "wnoise": "quic",'
-    echo '        "wnoisecount": "15",'
-    echo '        "wnoisedelay": "1-2",'
-    echo '        "wpayloadsize": "5-10"'
+    echo '        "wnoisecount": "10-15",'
+    echo '        "wpayloadsize": "1-8",'
+    echo '        "wnoisedelay": "1-3"'
     echo '      },'
-    echo '      "tag": "proxy"'
+    echo '      "streamSettings": {"sockopt": {"dialerProxy": "warp-ir"}},'
+    echo '      "tag": "warp-out"'
     echo '    },'
     echo '    {'
-    echo '      "protocol": "freedom",'
+    echo '      "protocol": "wireguard",'
     echo '      "settings": {'
-    echo '        "domainStrategy": "UseIP"'
-    echo '      },'
-    echo '      "tag": "direct"'
-    echo '    },'
-    echo '    {'
-    echo '      "protocol": "blackhole",'
-    echo '      "settings": {'
-    echo '        "response": {'
-    echo '          "type": "http"'
-    echo '        }'
-    echo '      },'
-    echo '      "tag": "block"'
-    echo '    }'
-    echo '  ],'
-    echo '  "remarks": "'$new_name'",'
-    echo '  "routing": {'
-    echo '    "domainStrategy": "IPIfNonMatch",'
-    echo '    "rules": ['
- 
+    echo '        "address": ["'$address_ipv4'/32", "'$address_ipv6'/128"],'
+    echo '        "mtu": '$new_mtu','
+    echo '        "peers": 
