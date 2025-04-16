@@ -58,28 +58,31 @@ install_script() {
         chmod +x ~/.argh94/argh94_warp.sh
         # Ensure .bashrc exists
         touch ~/.bashrc
-        # Update or add alias to .bashrc
-        if grep -q "alias Arg=" ~/.bashrc; then
-            sed -i "s|alias Arg=.*|alias Arg='bash ~/.argh94/argh94_warp.sh'|" ~/.bashrc
-        else
-            echo "alias Arg='bash ~/.argh94/argh94_warp.sh'" >> ~/.bashrc
-        fi
-        # Check for .bash_profile or other files
+        # Remove any old Arg alias
+        sed -i '/alias Arg=/d' ~/.bashrc
+        # Add new alias to .bashrc
+        echo "alias Arg='bash ~/.argh94/argh94_warp.sh'" >> ~/.bashrc
+        # Ensure .bash_profile sources .bashrc
         if [ -f ~/.bash_profile ]; then
             if ! grep -q "source ~/.bashrc" ~/.bash_profile; then
                 echo "source ~/.bashrc" >> ~/.bash_profile
             fi
+        else
+            touch ~/.bash_profile
+            echo "source ~/.bashrc" >> ~/.bash_profile
         fi
         # Try to reload .bashrc
         if ! source ~/.bashrc 2>/dev/null && ! . ~/.bashrc 2>/dev/null; then
-            echo -e "${YELLOW}Warning: Could not reload .bashrc. Please run 'source ~/.bashrc' manually.${RESET}"
+            echo -e "${YELLOW}Warning: Could not reload .bashrc automatically.${RESET}"
         fi
         echo -e "${GREEN}Script installed successfully! Run it by typing 'Arg' in Termux.${RESET}"
-        echo -e "${CYAN}If 'Arg' doesn't work, run 'source ~/.bashrc' and try again.${RESET}"
+        echo -e "${CYAN}Please run 'source ~/.bashrc' or restart Termux to use 'Arg'.${RESET}"
+        echo -e "${CYAN}If 'Arg' still doesn't work, check ~/.bashrc and ~/.bash_profile.${RESET}"
     else
         echo -e "${RED}Error: Failed to download the script. Please check your internet connection and try again.${RESET}"
         exit 1
     fi
+}
 }
 # Main menu with colored border
 echo -e "${GREEN}┌──────────────────────────────────┐${RESET}"
