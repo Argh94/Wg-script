@@ -2,10 +2,12 @@
 
 <div dir="rtl">
 
+![Visitor Count](https://komarev.com/ghpvc/?username=Argh94&repo=Wg-script&label=بازدید)
 ![Version](https://img.shields.io/badge/نسخه-1.0.0-orange.svg)
 ![Termux](https://img.shields.io/badge/Termux-سازگار-green.svg)
 ![License](https://img.shields.io/badge/لایسنس-MIT-blue.svg)
 [![GitHub Stars](https://img.shields.io/github/stars/Argh94/Wg-script?style=flat-square)](https://github.com/Argh94/Wg-script/stargazers)
+
 
 ## 📌 معرفی
 یک اسکریپت قدرتمند و کاربردی برای تولید خودکار پیکربندی‌های WARP با پشتیبانی از پروتکل WireGuard. این اسکریپت برای استفاده در Termux بهینه‌سازی شده و قابلیت تولید پیکربندی برای کلاینت‌های مختلف VPN را دارد.
