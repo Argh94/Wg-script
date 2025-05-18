@@ -8,6 +8,7 @@
 ![License](https://img.shields.io/badge/لایسنس-MIT-blue.svg)
 [![GitHub Stars](https://img.shields.io/github/stars/Argh94/Wg-script?style=flat-square)](https://github.com/Argh94/Wg-script/stargazers)
 
+![عکس محیط برنامه](https://github.com/Argh94/Wg-script/blob/main/IMG_20250518_202027.jpg/800x200.png?text=عکس)
 
 ## 📌 معرفی
 یک اسکریپت قدرتمند و کاربردی برای تولید خودکار پیکربندی‌های WARP با پشتیبانی از پروتکل WireGuard. این اسکریپت برای استفاده در Termux بهینه‌سازی شده و قابلیت تولید پیکربندی برای کلاینت‌های مختلف VPN را دارد.
